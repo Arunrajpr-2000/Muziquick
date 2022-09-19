@@ -1,4 +1,5 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
+
 // import 'package:flutter/material.dart';
 import 'package:music_player/model/box_class.dart';
 import 'package:music_player/model/hivemodel.dart';
@@ -12,6 +13,16 @@ final _audioquery = OnAudioQuery();
 List<Audio> audiosongs = [];
 List<LocalSongs> mappedsongs = [];
 List<LocalSongs> databaseSong = [];
+List? databasesongs = [];
+
+//favourites---->
+List<Audio> PlayLikedSong = [];
+List<LocalSongs> Likedsongsmodel = [];
+//final likedSongs = box.get("favorites");
+List<dynamic> favorites = [];
+List<dynamic>? likedsongs = [];
+
+// List<dynamic> likedSongS = [];
 
 fetchingsongs() async {
   bool ispermission = await _audioquery.permissionsStatus();

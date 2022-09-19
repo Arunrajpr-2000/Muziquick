@@ -1,8 +1,15 @@
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:music_player/screens/nowplay.dart';
 import 'package:music_player/widgets/drawer.dart';
-import 'package:music_player/widgets/fav.dart';
+
+import 'package:on_audio_query/on_audio_query.dart';
+
+import '../functions/functions.dart';
+
+import '../open audio/openaudio.dart';
 
 class ScreenFavourite extends StatefulWidget {
   ScreenFavourite({Key? key}) : super(key: key);
@@ -28,40 +35,77 @@ class _ScreenFavouriteState extends State<ScreenFavourite> {
       drawer: ScreenDrawer(),
       body: Padding(
         padding: const EdgeInsets.only(top: 10),
-        child: ListView.builder(
-          itemBuilder: (context, index) {
-            return ListTile(
-              onTap: () {
-                // Navigator.of(context).push(
-                //     MaterialPageRoute(builder: (ctx1) => ScreenNowplay(
-                //       songModel: item.data![index],
-                //     )));
-              },
-              title: Text(
-                'Hope',
-                style: TextStyle(color: Colors.white),
-              ),
-              subtitle: Text(
-                'xxx tentaction',
-                style: TextStyle(color: Colors.white),
-              ),
-              leading: CircleAvatar(
-                radius: 30,
-                backgroundColor: Colors.white,
-                child: ClipOval(
-                  child: Image.asset(
-                    'asset images/xxxtent.jpg',
-                    width: 55,
-                    height: 55,
-                    fit: BoxFit.cover,
+        child: ValueListenableBuilder(
+            valueListenable: box.listenable(),
+            builder: (context, Boxes, _) {
+              final likedsongs = box.get("favorites");
+              return ListView.builder(
+                itemBuilder: (context, index) => GestureDetector(
+                  onTap: () {
+                    for (var element in likedsongs!) {
+                      PlayLikedSong.add(
+                        Audio.file(
+                          element.uri!,
+                          metas: Metas(
+                            title: element.title,
+                            id: element.id.toString(),
+                            artist: element.artist,
+                          ),
+                        ),
+                      );
+                    }
+                    PlayMyAudio(allsongs: PlayLikedSong, index: index)
+                        .openAsset(index: index, audios: PlayLikedSong);
+
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ScreenNowplay(
+                                  // index: index,
+
+                                  myaudiosong: PlayLikedSong,
+                                )));
+                  },
+                  child: ListTile(
+                    leading: QueryArtworkWidget(
+                        id: likedsongs![index].id,
+                        type: ArtworkType.AUDIO,
+                        nullArtworkWidget: ClipOval(
+                          child: Image.asset(
+                            'asset images/ArtMusicMen.jpg.jpg',
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                          ),
+                        )),
+                    trailing: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          likedsongs.removeAt(index);
+                          box.put("favorites", likedsongs);
+                        });
+                      },
+                      icon: const Icon(Icons.close, color: Colors.white),
+                    ),
+                    title: Text(
+                      likedsongs[index].title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    subtitle: Text(
+                      likedsongs[index].artist == '<unknown>'
+                          ? 'unknown Artist'
+                          : likedsongs[index].artist,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ),
-              ),
-              trailing: FavWidget(),
-            );
-          },
-          itemCount: 5,
-        ),
+                itemCount: likedsongs!.length,
+              );
+            }),
       ),
     );
   }

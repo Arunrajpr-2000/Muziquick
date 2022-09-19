@@ -41,9 +41,13 @@ class _MiniPlayerState extends State<MiniPlayer> {
               child: QueryArtworkWidget(
                 id: int.parse(myAudio.metas.id!),
                 type: ArtworkType.AUDIO,
-                nullArtworkWidget: const Icon(
-                  Icons.music_note,
-                  color: Colors.white,
+                nullArtworkWidget: ClipOval(
+                  child: Image.asset(
+                    'asset images/ArtMusicMen.jpg.jpg',
+                    width: 80,
+                    height: 80,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),

@@ -3,6 +3,7 @@
 // import 'package:just_audio/just_audio.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:miniplayer/miniplayer.dart';
+import 'package:music_player/functions/functions.dart';
 import 'package:music_player/model/box_class.dart';
 import 'package:music_player/model/hivemodel.dart';
 import 'package:music_player/tabs/favourite_tab.dart';
@@ -11,6 +12,7 @@ import 'package:music_player/widgets/fav.dart';
 import 'package:music_player/widgets/miniplayer.dart';
 import 'package:music_player/widgets/miniply.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+
 // import 'package:permission_handler/permission_handler.dart';
 
 import 'package:flutter/material.dart';
@@ -20,23 +22,24 @@ import 'package:music_player/screens/playlist.dart';
 import 'package:music_player/screens/settings.dart';
 import 'package:music_player/screens/splash.dart';
 import 'package:music_player/widgets/drawer.dart';
+import '../functions/functions.dart';
 
 import '../open audio/openaudio.dart';
 
 class ScreenHome extends StatefulWidget {
-  List<Audio> audiosongs = [];
   ScreenHome({Key? key, required this.audiosongs}) : super(key: key);
-
+  List<Audio> audiosongs = [];
   @override
   State<ScreenHome> createState() => _ScreenHomeState();
 }
 
 class _ScreenHomeState extends State<ScreenHome> {
   Icon myIcon = const Icon(Icons.search);
+  // Widget myField = const Text('Musics');
+  // Widget myField = const Text('Student Data');
   Widget myTitle = const Text('All Songs');
   String searchInput = "";
 
-  final box = Boxes.getinstance();
   // final _audioQuery = OnAudioQuery();
 
   // List? databasesongs = [];
@@ -44,8 +47,10 @@ class _ScreenHomeState extends State<ScreenHome> {
   @override
   void initState() {
     // TODO: implement initState
+    // likedsongs = box.get('favorites');
+    databasesongs = box.get('musics');
+
     super.initState();
-    // databasesongs = box.get('musics') as List<LocalSongs>;
   }
 
   //final AudioPlayer _audioPlayer = AudioPlayer();
@@ -74,35 +79,28 @@ class _ScreenHomeState extends State<ScreenHome> {
                 onPressed: () {
                   setState(() {
                     if (myIcon.icon == Icons.search) {
-                      myIcon = const Icon(
-                        Icons.clear,
-                        color: Colors.orange,
-                      );
+                      myIcon = const Icon(Icons.clear);
                       myTitle = TextField(
                         onChanged: (value) {
                           searchInput = value;
                           setState(() {});
                         },
-                        decoration: InputDecoration(
-                            fillColor: Colors.grey,
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            hintText: 'Search here',
-                            hintStyle: TextStyle(color: Colors.grey)),
+                        decoration: const InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white)),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white)),
+                          hintText: 'Search here',
+                        ),
                         style:
-                            const TextStyle(color: Colors.white, fontSize: 18),
+                            const TextStyle(color: Colors.black, fontSize: 18),
                       );
                     } else {
                       setState(() {
                         searchInput = '';
                       });
                       myIcon = const Icon(Icons.search);
-                      myTitle = const Text('All Songs');
+                      myTitle = const Text('All songs');
                     }
                   });
                 },
@@ -135,66 +133,172 @@ class _ScreenHomeState extends State<ScreenHome> {
                   itemCount: widget.audiosongs.length,
                   itemBuilder: (context, index) {
                     return ListTile(
-                        onTap: () {
-                          PlayMyAudio(index: index, allsongs: widget.audiosongs)
-                              .openAsset();
+                      onTap: () {
+                        PlayMyAudio(index: index, allsongs: widget.audiosongs)
+                            .openAsset(audios: audiosongs, index: index);
 
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (ctx1) => ScreenNowplay(
-                                    song: widget.audiosongs[index],
-                                    myaudiosong: widget.audiosongs,
-                                  )));
-                        },
-                        title: Text(
-                          '${widget.audiosongs[index].metas.title.toString()}',
-                          maxLines: 1,
-                          style: TextStyle(color: Colors.white),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        subtitle: Text(
-                          '${widget.audiosongs[index].metas.artist.toString()}',
-                          maxLines: 1,
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        leading: QueryArtworkWidget(
-                          id: int.parse(
-                              widget.audiosongs[index].metas.id.toString()),
-                          type: ArtworkType.AUDIO,
-                          //size: 250,
-                          nullArtworkWidget: const Icon(
-                            Icons.music_note,
-                            color: Colors.white,
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (ctx1) => ScreenNowplay(
+                                  song: widget.audiosongs[index],
+                                  myaudiosong: widget.audiosongs,
+                                )));
+                      },
+                      title: Text(
+                        '${widget.audiosongs[index].metas.title.toString()}',
+                        maxLines: 1,
+                        style: TextStyle(color: Colors.white),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      subtitle: Text(
+                        widget.audiosongs[index].metas.artist.toString() ==
+                                '<unknown>'
+                            ? 'unknown Artist'
+                            : widget.audiosongs[index].metas.artist.toString(),
+                        maxLines: 1,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      leading: QueryArtworkWidget(
+                        id: int.parse(
+                            widget.audiosongs[index].metas.id.toString()),
+                        type: ArtworkType.AUDIO,
+                        //size: 250,
+                        nullArtworkWidget: ClipOval(
+                          child: Image.asset(
+                            'asset images/ArtMusicMen.jpg.jpg',
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
                           ),
                         ),
-                        trailing: PopupMenuButton(
-                          itemBuilder: (context) {
-                            return [
-                              const PopupMenuItem(
-                                value: 1,
-                                child: Text(
-                                  'Add to fav',
+                      ),
+                      trailing: IconButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              // likedsongs = box.get("favorites");
+                              return Dialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(50),
                                 ),
-                              ),
-                              const PopupMenuItem(
-                                value: 2,
-                                child: Text('Add to Plylist'),
-                              ),
-                            ];
-                          },
-                          icon: const Icon(
-                            Icons.more_vert,
-                            color: Colors.white,
-                          ),
-                          onSelected: (value) {
-                            if (value == 1) {
-                              // Navigator.of(context).push(MaterialPageRoute(
-                              //     builder: (ctx1) => Fav_tab()));
-                            } else {
-                              // Navigator.of(context).push(MaterialPageRoute(
-                              //     builder: (ctx1) => Playlist_tab()));
-                            }
-                          },
-                        ));
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                      color: Color(0xff091127),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(50))),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          // ListTile(
+                                          //   title:  Text(
+                                          //     "Add to Playlist",
+                                          //     style: TextStyle(
+                                          //         fontFamily: "poppinz",
+                                          //         color: Colors.white,
+                                          //         fontWeight:
+                                          //             FontWeight.bold,
+                                          //         fontSize: 18.sp),
+                                          //   ),
+                                          //   // trailing: const Icon(Icons.add),
+                                          //   onTap: () {
+                                          //     Navigator.of(context)
+                                          //         .pop();
+                                          //     showModalBottomSheet(
+                                          //         backgroundColor:
+                                          //             Colors.grey,
+                                          //         shape: const RoundedRectangleBorder(
+                                          //             borderRadius:
+                                          //                 BorderRadius.vertical(
+                                          //                     top: Radius
+                                          //                         .circular(
+                                          //                             20))),
+                                          //         context: context,
+                                          //         builder: (context) =>
+                                          //             PlaylistNow(
+                                          //                 song: widget
+                                          //                         .audiosongs[
+                                          //                     index]));
+                                          //   },
+                                          // ),
+                                          likedsongs!
+                                                  .where((element) =>
+                                                      element.id.toString() ==
+                                                      databasesongs![index]
+                                                          .id
+                                                          .toString())
+                                                  .isEmpty
+                                              ? ListTile(
+                                                  title: const Text(
+                                                      "Add to Favorites",
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 18)),
+                                                  onTap: () async {
+                                                    final songs =
+                                                        box.get("musics")
+                                                            as List<LocalSongs>;
+                                                    final temp = songs
+                                                        .firstWhere((element) =>
+                                                            element.id
+                                                                .toString() ==
+                                                            widget
+                                                                .audiosongs[
+                                                                    index]
+                                                                .metas
+                                                                .id
+                                                                .toString());
+                                                    favorites = likedsongs!;
+                                                    favorites.add(temp);
+                                                    box.put(
+                                                        "favorites", favorites);
+
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                )
+                                              : ListTile(
+                                                  title: Text(
+                                                    "Remove from Favorites",
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                  onTap: () async {
+                                                    likedsongs!.removeWhere(
+                                                        (elemet) =>
+                                                            elemet.id
+                                                                .toString() ==
+                                                            databasesongs![
+                                                                    index]
+                                                                .id
+                                                                .toString());
+                                                    await box.put("favorites",
+                                                        likedsongs!);
+                                                    setState(() {});
+
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                        ]),
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        icon: const Icon(
+                          Icons.more_vert,
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
                   },
                 ),
                 Playlist_tab(),

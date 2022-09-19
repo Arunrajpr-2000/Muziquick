@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/screens/favourite.dart';
 import 'package:music_player/screens/home.dart';
+import 'package:music_player/screens/nowplay.dart';
 import 'package:music_player/screens/playlist.dart';
 import 'package:music_player/screens/recent.dart';
 import 'package:music_player/screens/settings.dart';
@@ -63,21 +64,37 @@ class _DrawerState extends State<ScreenDrawer> {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (ctx1) => ScreenHome(audiosongs: audiosongs)));
               },
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.white,
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.favorite, color: Colors.white),
+              title: const Text(
+                'Favourites',
+                style: TextStyle(color: Colors.white),
+              ),
+              onTap: () {
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (ctx1) => ScreenFavourite()));
+              },
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.white,
+              ),
             ),
             // ListTile(
             //   leading: const Icon(Icons.star, color: Colors.white),
             //   title: const Text(
-            //     'Favourites',
+            //     'Now Play',
             //     style: TextStyle(color: Colors.white),
             //   ),
             //   onTap: () {
             //     Navigator.of(context).pushReplacement(MaterialPageRoute(
-            //         builder: (_) => ScreenHome(
-            //               audiosongs: audiosongs,
-            //             )));
+            //         builder: (ctx1) => ScreenNowplay(myaudiosong: audiosongs)));
             //   },
             // ),
-
             ListTile(
               leading: const Icon(Icons.music_note, color: Colors.white),
               title: const Text(
@@ -88,12 +105,20 @@ class _DrawerState extends State<ScreenDrawer> {
                 // Navigator.of(context).pushReplacement(
                 //     MaterialPageRoute(builder: (_) => Playlist_tab()));
               },
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.white,
+              ),
             ),
             ListTile(
               leading: const Icon(Icons.recent_actors, color: Colors.white),
               title: const Text(
                 'Recents',
                 style: TextStyle(color: Colors.white),
+              ),
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.white,
               ),
               onTap: () {
                 Navigator.of(context).pushReplacement(
@@ -106,6 +131,10 @@ class _DrawerState extends State<ScreenDrawer> {
                 'Settings',
                 style: TextStyle(color: Colors.white),
               ),
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.white,
+              ),
               onTap: () {
                 Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (ctx1) => ScreenSettings()));
@@ -116,6 +145,10 @@ class _DrawerState extends State<ScreenDrawer> {
               title: Text(
                 'About',
                 style: TextStyle(color: Colors.white),
+              ),
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.white,
               ),
               onTap: () {
                 showDialog(

@@ -27,6 +27,7 @@ class _ScreenSplashState extends State<ScreenSplash> {
   void initState() {
     fetchingsongs();
     gotohome();
+
     // gotohome();
     super.initState();
   }
