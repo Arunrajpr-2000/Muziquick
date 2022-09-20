@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:music_player/screens/favourite.dart';
 import 'package:music_player/screens/home.dart';
@@ -172,6 +174,23 @@ class _DrawerState extends State<ScreenDrawer> {
                     });
               },
             ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.2,
+            ),
+            Column(
+              // mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'Version',
+                  style: TextStyle(color: Colors.grey),
+                ),
+                Text(
+                  '1.0.0',
+                  style: TextStyle(color: Colors.grey),
+                )
+              ],
+            )
           ],
         ),
       ),

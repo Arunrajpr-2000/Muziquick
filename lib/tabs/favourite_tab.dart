@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:music_player/widgets/fav.dart';
+import 'package:music_player/widgets/miniplayer.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import '../functions/functions.dart';
@@ -18,9 +19,9 @@ class Fav_tab extends StatefulWidget {
 }
 
 class _Fav_tabState extends State<Fav_tab> {
-  List<LocalSongs> databasesong = [];
-  List<Audio> playlikedsongs = [];
-  List<LocalSongs> likedsongs = [];
+  // List<LocalSongs> databasesong = [];
+  // List<Audio> playlikedsongs = [];
+  // List<LocalSongs> likedsongs = [];
   // final box = Boxes.getinstance();
 
   @override
@@ -30,8 +31,6 @@ class _Fav_tabState extends State<Fav_tab> {
       child: ValueListenableBuilder(
           valueListenable: box.listenable(),
           builder: (context, Boxes, _) {
-            // final likedSongs = box.get("favorites");
-
             final likedSongs = box.get("favorites");
             if (likedSongs == null || likedSongs.isEmpty) {
               return Center(
@@ -39,7 +38,7 @@ class _Fav_tabState extends State<Fav_tab> {
                   'No Favourites',
                   style: TextStyle(
                       fontFamily: "poppinz",
-                      fontSize: 12,
+                      fontSize: 18,
                       fontWeight: FontWeight.w400,
                       color: Colors.white),
                 ),
@@ -63,25 +62,16 @@ class _Fav_tabState extends State<Fav_tab> {
                     PlayMyAudio(allsongs: PlayLikedSong, index: index)
                         .openAsset(index: index, audios: PlayLikedSong);
 
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ScreenNowplay(
-                                  // index: index,
-
-                                  myaudiosong: PlayLikedSong,
-                                )));
+                    showBottomSheet(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(45),
+                        ),
+                        // elevation: 20,
+                        backgroundColor: Colors.blueGrey.withOpacity(0.8),
+                        context: context,
+                        builder: (ctx) => MiniPlayer());
                   },
-                  child:
-                      // likedSongs == null
-                      //     ? Center(
-                      //         child: Text(
-                      //           'No Favourite songs',
-                      //           style: TextStyle(color: Colors.white),
-                      //         ),
-                      //       )
-                      // :
-                      ListTile(
+                  child: ListTile(
                     leading: QueryArtworkWidget(
                         id: likedSongs[index].id,
                         type: ArtworkType.AUDIO,
@@ -110,7 +100,7 @@ class _Fav_tabState extends State<Fav_tab> {
                     ),
                     subtitle: Text(
                       likedSongs[index].artist == '<unknown>'
-                          ? 'unknown Artist'
+                          ? 'unknown'
                           : likedSongs[index].artist,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

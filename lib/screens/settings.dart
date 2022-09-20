@@ -97,25 +97,22 @@ class _ScreenSettingsState extends State<ScreenSettings> {
                   });
             },
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-              bottom: 0,
-              top: 150,
-            ),
-            child: Column(
-              // mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'Version',
-                  style: TextStyle(color: Colors.grey),
-                ),
-                Text(
-                  '1.0.0',
-                  style: TextStyle(color: Colors.grey),
-                )
-              ],
-            ),
+          SizedBox(
+            height: size.width * 0.9,
+          ),
+          Column(
+            // mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                'Version',
+                style: TextStyle(color: Colors.grey),
+              ),
+              Text(
+                '1.0.0',
+                style: TextStyle(color: Colors.grey),
+              )
+            ],
           )
         ],
       ),

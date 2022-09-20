@@ -27,42 +27,50 @@ class _MiniPlayerState extends State<MiniPlayer> {
       final myAudio = find(audiosongs, playing!.audio.assetAudioPath);
       int? index;
       return Container(
-        height: 80,
-        decoration: BoxDecoration(
-            color: Colors.grey.shade400,
-            borderRadius: BorderRadius.circular(40)),
+        // color: Colors.white.withOpacity(0.1),
+        height: size.height * 0.12,
+
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              width: size.width * 0.2,
-              height: size.width * 0.2,
+              width: size.width * 0.23,
+              height: size.height * 0.2,
               child: QueryArtworkWidget(
                 id: int.parse(myAudio.metas.id!),
                 type: ArtworkType.AUDIO,
                 nullArtworkWidget: ClipOval(
                   child: Image.asset(
                     'asset images/ArtMusicMen.jpg.jpg',
-                    width: 80,
-                    height: 80,
+                    width: size.width * 0.23,
+                    height: size.height * 0.2,
+                    // width: size.width * 0.51,
+                    // height: size.height * 0.21,
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
             ),
-            Container(
-              width: 150,
-              child: Marquee(
-                text: myAudio.metas.title.toString(),
-                pauseAfterRound: const Duration(seconds: 3),
-                velocity: 30,
-                blankSpace: 50,
-                style: TextStyle(
-                    fontFamily: "poppinz",
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ScreenNowplay(myaudiosong: audiosongs),
+                ));
+              },
+              child: Container(
+                width: size.width * 0.4,
+                child: Marquee(
+                  text: myAudio.metas.title.toString(),
+                  pauseAfterRound: const Duration(seconds: 3),
+                  velocity: 30,
+                  blankSpace: 50,
+                  style: TextStyle(
+                      fontFamily: "poppinz",
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
             ),
             Row(

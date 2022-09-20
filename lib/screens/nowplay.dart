@@ -85,28 +85,30 @@ class _ScreenNowplayState extends State<ScreenNowplay> {
             children: [
               Container(
                 // width: 300,
-                width: size.width * 1,
+                width: size.width * 1.5,
                 // width: size.width,
 //height: size.height,
                 height: size.height * 0.3,
 
-                margin:
-                    EdgeInsets.only(left: 80, top: 50, right: 80, bottom: 20),
+                margin: EdgeInsets.only(left: 80, top: 50, right: 80),
                 child:
                     // ClipRRect(child: Image.asset('asset images/plyscrnImg.jpeg')),
                     QueryArtworkWidget(
-                        id: int.parse(myAudio.metas.id!),
-                        type: ArtworkType.AUDIO,
-                        nullArtworkWidget: ClipOval(
-                          child: Image.asset(
-                            'asset images/ArtMusicMen.jpg.jpg',
-                            width: 50,
-                            height: 50,
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                        // artworkBorder: BorderRadius.circular(20),
-                        ),
+                  id: int.parse(myAudio.metas.id!),
+                  type: ArtworkType.AUDIO,
+                  nullArtworkWidget: ClipRect(
+                    child: Image.asset(
+                      'asset images/ArtMusicMen.jpg.jpg',
+                      width: size.width * 0.5,
+                      height: size.height * 0.2,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  artworkBorder: BorderRadius.circular(10),
+                ),
+              ),
+              SizedBox(
+                height: size.height * 0.05,
               ),
               Text(
                 // widget.song.metas.title.toString(),
@@ -117,6 +119,9 @@ class _ScreenNowplayState extends State<ScreenNowplay> {
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white70, fontSize: 24),
               ),
+              SizedBox(
+                height: size.height * 0.01,
+              ),
               Text(
                 myAudio.metas.artist.toString() == '<unknown>'
                     ? 'unknown Artist'
@@ -126,7 +131,7 @@ class _ScreenNowplayState extends State<ScreenNowplay> {
                 style: TextStyle(color: Colors.white70, fontSize: 15),
               ),
               SizedBox(
-                height: size.height * 0.05,
+                height: size.height * 0.09,
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20),
