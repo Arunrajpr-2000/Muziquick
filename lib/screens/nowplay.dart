@@ -3,6 +3,7 @@ import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:music_player/functions/functions.dart';
 import 'package:music_player/model/hivemodel.dart';
+import 'package:music_player/PlayList/add_to_playlist_from_home.dart';
 // import 'package:just_audio/just_audio.dart';
 import 'package:music_player/widgets/fav.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -24,34 +25,21 @@ class ScreenNowplay extends StatefulWidget {
 }
 
 class _ScreenNowplayState extends State<ScreenNowplay> {
-  bool _isplaying = true;
-  double _currentsliderValue = 20;
-  int? index;
+  // bool _isplaying = true;
+  // double _currentsliderValue = 20;
+  // int? index;
   int repeat = 0;
+  //List<dynamic> likedSongs = [];
 
   //final AudioPlayer _audioPlayer = AudioPlayer();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    databaseSong = box.get('musics') as List<LocalSongs>;
 
-    // playsong();
     assetsAudioPlayer.play();
   }
-  // void playsong() {
-  //   try {
-  //     widget.audioPlayer
-  //         .setAudioSource(AudioSource.uri(Uri.parse(widget.songModel.uri!)));
-  //     widget.audioPlayer.play();
-  //     _isplaying = true;
-  //   } on Exception {
-  //     log('Cannot parse song');
-  //   }
-  // }
-
-  // Audio find(List<Audio> source, String fromPath) {
-  //   return source.firstWhere((element) => element.path == fromPath);
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -74,22 +62,17 @@ class _ScreenNowplayState extends State<ScreenNowplay> {
         final currentSong = databaseSong.firstWhere(
             (element) => element.id.toString() == myAudio.metas.id.toString());
         // likedSongs = box.get("favorites");
+        likedsongs = box.get("favorites");
         if (playing.audio.assetAudioPath.isEmpty) {
           return Center(
             child: Text('Loading....!!!'),
           );
         } else {
           return Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
-            // crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                // width: 300,
                 width: size.width * 1.5,
-                // width: size.width,
-//height: size.height,
                 height: size.height * 0.3,
-
                 margin: EdgeInsets.only(left: 80, top: 50, right: 80),
                 child:
                     // ClipRRect(child: Image.asset('asset images/plyscrnImg.jpeg')),
@@ -153,7 +136,7 @@ class _ScreenNowplayState extends State<ScreenNowplay> {
                             onPressed: () async {
                               likedsongs?.add(currentSong);
                               box.put("favorites", likedsongs!);
-                              //likedSongs = box.get("favorites");
+                              // likedSongs = box.get("favorites");
                               setState(() {});
                             },
                           )
@@ -173,7 +156,14 @@ class _ScreenNowplayState extends State<ScreenNowplay> {
                             },
                           ),
                     IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          showModalBottomSheet(
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20))),
+                              context: context,
+                              builder: (context) => PlaylistNow(song: myAudio));
+                        },
                         icon: Icon(
                           Icons.playlist_add,
                           color: Colors.white,

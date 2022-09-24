@@ -98,7 +98,7 @@ class _ScreenSettingsState extends State<ScreenSettings> {
             },
           ),
           SizedBox(
-            height: size.width * 0.9,
+            height: size.width * 0.5,
           ),
           Column(
             // mainAxisAlignment: MainAxisAlignment.start,

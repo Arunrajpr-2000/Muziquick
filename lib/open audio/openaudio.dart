@@ -12,7 +12,7 @@ class PlayMyAudio {
     await audioPlayer.open(
       Playlist(audios: allsongs, startIndex: index),
       loopMode: LoopMode.playlist,
-      showNotification: false,
+      showNotification: true,
       // notificationSettings: NotificationSettings(
       //   customStopIcon: AndroidResDrawable(name: "ic_stop_custom"),
       //   customPauseIcon: AndroidResDrawable(name: "ic_pause_custom"),

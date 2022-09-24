@@ -2,14 +2,12 @@ import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'package:music_player/widgets/fav.dart';
 import 'package:music_player/widgets/miniplayer.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import '../functions/functions.dart';
-import '../model/hivemodel.dart';
+
 import '../open audio/openaudio.dart';
-import '../screens/nowplay.dart';
 
 class Fav_tab extends StatefulWidget {
   Fav_tab({Key? key}) : super(key: key);
@@ -31,8 +29,8 @@ class _Fav_tabState extends State<Fav_tab> {
       child: ValueListenableBuilder(
           valueListenable: box.listenable(),
           builder: (context, Boxes, _) {
-            final likedSongs = box.get("favorites");
-            if (likedSongs == null || likedSongs.isEmpty) {
+            likedsongs = box.get("favorites");
+            if (likedsongs == null || likedsongs!.isEmpty) {
               return Center(
                 child: Text(
                   'No Favourites',
@@ -47,7 +45,7 @@ class _Fav_tabState extends State<Fav_tab> {
               return ListView.builder(
                 itemBuilder: (context, index) => GestureDetector(
                   onTap: () {
-                    for (var element in likedSongs) {
+                    for (var element in likedsongs!) {
                       PlayLikedSong.add(
                         Audio.file(
                           element.uri!,
@@ -73,7 +71,7 @@ class _Fav_tabState extends State<Fav_tab> {
                   },
                   child: ListTile(
                     leading: QueryArtworkWidget(
-                        id: likedSongs[index].id,
+                        id: likedsongs![index].id,
                         type: ArtworkType.AUDIO,
                         nullArtworkWidget: ClipOval(
                           child: Image.asset(
@@ -86,29 +84,29 @@ class _Fav_tabState extends State<Fav_tab> {
                     trailing: IconButton(
                       onPressed: () {
                         setState(() {
-                          likedSongs.removeAt(index);
-                          box.put("favorites", likedSongs);
+                          likedsongs!.removeAt(index);
+                          box.put("favorites", likedsongs!);
                         });
                       },
                       icon: Icon(Icons.favorite, color: Colors.red),
                     ),
                     title: Text(
-                      likedSongs[index].title,
+                      likedsongs![index].title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(color: Colors.white),
                     ),
                     subtitle: Text(
-                      likedSongs[index].artist == '<unknown>'
+                      likedsongs![index].artist == '<unknown>'
                           ? 'unknown'
-                          : likedSongs[index].artist,
+                          : likedsongs![index].artist,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ),
-                itemCount: likedSongs.length,
+                itemCount: likedsongs!.length,
               );
             }
           }),

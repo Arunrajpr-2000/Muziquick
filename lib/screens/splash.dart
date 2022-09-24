@@ -1,10 +1,7 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
-import 'package:music_player/model/box_class.dart';
-import 'package:music_player/model/hivemodel.dart';
+
 import 'package:music_player/screens/home.dart';
-import 'package:on_audio_query/on_audio_query.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../functions/functions.dart';
 

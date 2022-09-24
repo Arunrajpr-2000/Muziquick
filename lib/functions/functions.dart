@@ -22,7 +22,7 @@ List<LocalSongs> Likedsongsmodel = [];
 List<dynamic> favorites = [];
 List<dynamic>? likedsongs = [];
 
-// List<dynamic> likedSongS = [];
+//List<dynamic>? likedSongS = [];
 
 fetchingsongs() async {
   bool ispermission = await _audioquery.permissionsStatus();
@@ -58,3 +58,22 @@ Audio find(List<Audio> source, String fromPath) {
 
 //asset audioplayer object-->
 AssetsAudioPlayer assetsAudioPlayer = AssetsAudioPlayer.withId('0');
+
+//Playlist-->
+List playlists = [];
+String? playlistName = '';
+
+List<dynamic>? playlistSongs = [];
+
+//  List<LocalSongs>? playlistSongs = [];
+List<Audio> playlistsplay = [];
+
+//List<LocalSongs> dbSongs = [];
+List<LocalSongs> playlistSongmodel = [];
+
+  
+
+
+//Search--->
+
+
