@@ -1,16 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/screens/home.dart';
+import 'package:music_player/functions/functions.dart';
+
 import 'package:music_player/widgets/drawer.dart';
 
+bool temp = true;
+
 class ScreenSettings extends StatefulWidget {
-  ScreenSettings({Key? key}) : super(key: key);
+  const ScreenSettings({Key? key}) : super(key: key);
 
   @override
   State<ScreenSettings> createState() => _ScreenSettingsState();
 }
 
 class _ScreenSettingsState extends State<ScreenSettings> {
-  bool islight = false;
+  bool islight = true;
+
+  static bool toggleNotification({required bool isNotificationOn}) {
+    isNotificationOn
+        ? assetsAudioPlayer.showNotification = true
+        : assetsAudioPlayer.showNotification = false;
+    assetsAudioPlayer.showNotification ? temp = true : temp = false;
+
+    return temp;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    // switchvalues();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -30,11 +50,8 @@ class _ScreenSettingsState extends State<ScreenSettings> {
       body: Column(
         children: [
           ListTile(
-            leading: Icon(
-              Icons.notifications,
-              color: Colors.white,
-            ),
-            title: Text(
+            leading: const Icon(Icons.notifications, color: Colors.white),
+            title: const Text(
               'Notification',
               style: TextStyle(color: Colors.white),
             ),
@@ -43,19 +60,21 @@ class _ScreenSettingsState extends State<ScreenSettings> {
                 activeColor: Colors.orange,
                 value: islight,
                 onChanged: (value) {
+                  bool temp = value;
+                  temp = toggleNotification(isNotificationOn: value);
                   setState(() {
-                    islight = value;
+                    islight = temp;
                   });
                 }),
           ),
-          ListTile(
+          const ListTile(
             leading: Icon(Icons.share, color: Colors.white),
             title: Text(
               'Share',
               style: TextStyle(color: Colors.white),
             ),
           ),
-          ListTile(
+          const ListTile(
             leading: Icon(Icons.lock, color: Colors.white),
             title: Text(
               'Privacy policy',
@@ -63,38 +82,52 @@ class _ScreenSettingsState extends State<ScreenSettings> {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.gavel, color: Colors.white),
-            title: Text(
-              'Terms & conditions',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
+              leading: const Icon(Icons.gavel, color: Colors.white),
+              title: const Text(
+                'Terms & conditions',
+                style: TextStyle(color: Colors.white),
+              ),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+                  return const LicensePage();
+                }));
+              }),
           ListTile(
-            leading: Icon(Icons.error_outline, color: Colors.white),
-            title: Text(
+            leading: const Icon(Icons.error_outline, color: Colors.white),
+            title: const Text(
               'About',
               style: TextStyle(color: Colors.white),
             ),
             onTap: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Column(
-                        children: [
-                          const Text('MuziQuick '),
-                          Text('Version 1.0.0')
-                        ],
-                      ),
-                      actions: [
-                        TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text('Okey')),
-                      ],
-                    );
-                  });
+              // AlertDialog();
+              showAboutDialog(
+                context: context,
+                applicationName: "MIXPOD",
+
+                applicationIcon: SizedBox(
+                  height: size.height * 0.05,
+                  width: size.width * 0.2,
+                  child: Image.asset(
+                    'asset images/landscape,-transparent-bg-+-shadow-designify.png',
+                    // width: 70,
+                    // height: 70,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+                applicationVersion: "1.0",
+                children: [
+                  const Text(
+                    "MIXPOD is a offline music player created by Arun Raj P R",
+                    style: TextStyle(
+                        fontFamily: "poppinz", fontWeight: FontWeight.w500),
+                  )
+                ],
+                // applicationIcon: SizedBox(
+                //   height: 45,
+                //   width: 45,
+                // child: Image.asset("assets/logo.jpg",fit: BoxFit.cover,),
+                // )
+              );
             },
           ),
           SizedBox(
@@ -103,7 +136,7 @@ class _ScreenSettingsState extends State<ScreenSettings> {
           Column(
             // mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+            children: const [
               Text(
                 'Version',
                 style: TextStyle(color: Colors.grey),

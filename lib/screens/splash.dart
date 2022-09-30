@@ -2,6 +2,7 @@ import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 
 import 'package:music_player/screens/home.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 import '../functions/functions.dart';
 
@@ -29,81 +30,61 @@ class _ScreenSplashState extends State<ScreenSplash> {
     super.initState();
   }
 
-  // void requestPermission() {
-  //   Permission.storage.request();
-  // }
-  // List<SongModel> allSongs = [];
-
-  // fetchingsongs() async {
-  //   bool ispermission = await _audioquery.permissionsStatus();
-  //   if (!ispermission) {
-  //     await _audioquery.permissionsRequest();
-  //   }
-  //   allSongs = await _audioquery.querySongs();
-  //   mappedsongs = allSongs
-  //       .map((e) => LocalSongs(
-  //           title: e.title,
-  //           artist: e.artist,
-  //           id: e.id,
-  //           duration: e.duration,
-  //           uri: e.uri!))
-  //       .toList();
-
-  //   await box.put("musics", mappedsongs);
-  //   databaseSong = box.get("musics") as List<LocalSongs>;
-
-  //   databaseSong.forEach((element) {
-  //     audiosongs.add(Audio.file(element.uri.toString(),
-  //         metas: Metas(
-  //             title: element.title,
-  //             id: element.id.toString(),
-  //             artist: element.artist)));
-  //   });
-  //   gotohome();
-  // }
-
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Color(0xff091127),
-        body: Center(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'asset images/SAVE_20220829_222402-removebg.png',
-                  width: 150,
-                  height: 150,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Text(
-                      'Muzi',
-                      style: TextStyle(
-                          color: Color(0xffE71F1F),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30),
-                    ),
-                    Text(
-                      'Quick',
-                      style: TextStyle(
-                          color: Color(0xff24BBBB),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30),
-                    )
-                  ],
-                )
-              ]),
+    return Scaffold(
+      backgroundColor: Color(0xff091127),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage(
+                  "asset images/Premium-Photo-_-Crowd-in-nightclub.jpeg"),
+              fit: BoxFit.fill),
         ),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage(
+                          "asset images/landscape,-transparent-bg-+-shadow-designify.png"),
+                      fit: BoxFit.cover),
+                ),
+
+                // child: Image.asset(
+                //   'asset images/logopage21.png',
+                //   width: 150,
+                //   height: 150,
+                // ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GradientText("M I X P O D",
+                      style: TextStyle(
+                          fontFamily: "poppinz",
+                          fontSize: 28,
+                          fontWeight: FontWeight.w700),
+                      colors: const [
+                        // Color(0xff7c4093),
+                        // Color(0xffad3d4d),
+                        // Color(0xff003d80),
+                        Color(0xff1682cb),
+                        Color(0xffd9f7f7),
+                      ])
+                ],
+              )
+            ]),
       ),
     );
   }
 
   Future<void> gotohome() async {
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 3));
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (ctx) => ScreenHome(audiosongs: audiosongs),

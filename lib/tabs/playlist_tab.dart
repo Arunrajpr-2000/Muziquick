@@ -3,6 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:music_player/PlayList/music_in_playlist.dart';
 import 'package:music_player/functions/functions.dart';
+import 'package:music_player/functions/functions.dart';
 
 import 'package:music_player/model/hivemodel.dart';
 import 'package:music_player/widgets/edit_playlist.dart';
@@ -178,176 +179,181 @@ class _Playlist_tabState extends State<Playlist_tab> {
                           );
                         },
                         child: playlists[index] != "musics" &&
-                                playlists[index] != "favorites"
+                                playlists[index] != "favorites" &&
+                                playlists[index] != "recent"
                             ? libraryList(
                                 // child: customplay(
                                 //     aatitle: playlists[index].toString(),))
-                                child: Column(
-                                children: [
-                                  GestureDetector(
-                                    child: Container(
-                                      height: 83,
-                                      width: 350,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          // color: Colors.grey.withOpacity(0.5),
-                                          color: Color(0xffB1B2FF)),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(12.0),
-                                        child: Row(
-                                          children: [
-                                            Container(
-                                              height: 58,
-                                              width: 58,
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  color: Colors.black
-                                                      .withOpacity(0.3)),
-                                              child: Image.asset(
-                                                'asset images/ArtMusicMen.jpg.jpg',
-                                                // width: 50,
-                                                // height: 50,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: 20,
-                                            ),
-                                            SizedBox(
-                                              width: 100,
-                                              child: Text(
-                                                playlists[index].toString(),
-                                                maxLines: 1,
-                                                style: TextStyle(
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    fontFamily: "poppinz",
-                                                    color: Colors.white,
-                                                    fontSize: 20,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              ),
-                                            ),
-                                            const Spacer(),
-                                            IconButton(
-                                                onPressed: () {
-                                                  // showDialog(
-                                                  //     context: context,
-                                                  //     builder: (ctx) {
-                                                  //       return editplaylist(
-                                                  //         index: index,
-                                                  //         playlistName:
-                                                  //             playlists,
-                                                  //       );
-                                                  //     });
-                                                },
-                                                icon: Icon(
-                                                  Icons.edit,
-                                                  color: Colors.white,
-                                                )),
-                                            IconButton(
-                                                onPressed: () {
-                                                  showDialog(
-                                                      context: context,
-                                                      builder: (ctx) {
-                                                        return Dialog(
-                                                          backgroundColor:
-                                                              const Color(
-                                                                  0xff091127),
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(40.0),
-                                                            child: Container(
-                                                              width: 300,
-                                                              height: 115,
-                                                              child: Column(
-                                                                children: [
-                                                                  Text(
-                                                                    'Do you want to delete',
-                                                                    style: TextStyle(
-                                                                        fontFamily:
-                                                                            "poppinz",
-                                                                        fontSize:
-                                                                            20,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        color: Colors
-                                                                            .white),
-                                                                  ),
-                                                                  SizedBox(
-                                                                    height: 40,
-                                                                  ),
-                                                                  Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .spaceBetween,
-                                                                    children: [
-                                                                      SizedBox(
-                                                                        width:
-                                                                            80,
-                                                                        child: ElevatedButton(
-                                                                            style: ElevatedButton.styleFrom(primary: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-                                                                            onPressed: () {
-                                                                              box.delete(playlists[index]);
-                                                                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                                                                content: Text(
-                                                                                  "Deleted Successfully",
-                                                                                  style: TextStyle(
-                                                                                    fontSize: 15,
-                                                                                    fontWeight: FontWeight.bold,
-                                                                                  ),
-                                                                                ),
-                                                                                backgroundColor: Colors.orange,
-                                                                                behavior: SnackBarBehavior.floating,
-                                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                                                                              ));
-
-                                                                              setState(() {
-                                                                                playlists = box.keys.toList();
-                                                                              });
-                                                                              Navigator.pop(context);
-                                                                            },
-                                                                            child: const Text(
-                                                                              'Delete',
-                                                                              style: TextStyle(color: Colors.black),
-                                                                            )),
-                                                                      ),
-                                                                      SizedBox(
-                                                                        width:
-                                                                            80,
-                                                                        child: ElevatedButton(
-                                                                            style: ElevatedButton.styleFrom(primary: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-                                                                            onPressed: () {
-                                                                              Navigator.pop(context);
-                                                                            },
-                                                                            child: const Text(
-                                                                              'Cancel',
-                                                                              style: TextStyle(color: Colors.black),
-                                                                            )),
-                                                                      ),
-                                                                    ],
-                                                                  )
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        );
-                                                      });
-                                                },
-                                                icon: const Icon(
-                                                  Icons.delete,
-                                                  color: Colors.white,
-                                                )),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
+                                child: ListTile(
+                                contentPadding: EdgeInsets.all(10),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                tileColor: Color(0xff16213E),
+                                leading: CircleAvatar(
+                                  radius: 35,
+                                  backgroundImage: AssetImage(
+                                    'asset images/ArtMusicMen.jpg.jpg',
                                   ),
-                                ],
+                                ),
+                                title: Text(
+                                  playlists[index].toString(),
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                      overflow: TextOverflow.ellipsis,
+                                      fontFamily: "poppinz",
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                subtitle: Text(
+                                  '${listLength(listName: playlists[index]).toString()} Songs',
+                                  style: TextStyle(
+                                      overflow: TextOverflow.ellipsis,
+                                      // fontFamily: "poppinz",
+                                      color: Colors.white,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    IconButton(
+                                        onPressed: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (ctx) {
+                                                return editplaylist(
+                                                  playlistNameForEdit:
+                                                      playlists[index],
+                                                );
+                                              });
+                                        },
+                                        icon: Icon(
+                                          Icons.edit,
+                                          color: Colors.white,
+                                        )),
+                                    IconButton(
+                                        onPressed: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (ctx) {
+                                                return Dialog(
+                                                  backgroundColor:
+                                                      const Color(0xff091127),
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            40.0),
+                                                    child: Container(
+                                                      width: 300,
+                                                      height: 115,
+                                                      child: Column(
+                                                        children: [
+                                                          Text(
+                                                            'Do you want to delete',
+                                                            style: TextStyle(
+                                                                fontFamily:
+                                                                    "poppinz",
+                                                                fontSize: 20,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color: Colors
+                                                                    .white),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 40,
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              SizedBox(
+                                                                width: 80,
+                                                                child:
+                                                                    ElevatedButton(
+                                                                        style: ElevatedButton.styleFrom(
+                                                                            primary: Colors
+                                                                                .white,
+                                                                            shape: RoundedRectangleBorder(
+                                                                                borderRadius: BorderRadius.circular(
+                                                                                    10))),
+                                                                        onPressed:
+                                                                            () {
+                                                                          box.delete(
+                                                                              playlists[index]);
+                                                                          ScaffoldMessenger.of(context)
+                                                                              .showSnackBar(SnackBar(
+                                                                            content:
+                                                                                Text(
+                                                                              "Deleted Successfully",
+                                                                              style: TextStyle(
+                                                                                fontSize: 15,
+                                                                                fontWeight: FontWeight.bold,
+                                                                              ),
+                                                                            ),
+                                                                            backgroundColor:
+                                                                                Colors.orange,
+                                                                            behavior:
+                                                                                SnackBarBehavior.floating,
+                                                                            shape:
+                                                                                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                                                          ));
+
+                                                                          setState(
+                                                                              () {
+                                                                            playlists =
+                                                                                box.keys.toList();
+                                                                          });
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                        },
+                                                                        child:
+                                                                            const Text(
+                                                                          'Delete',
+                                                                          style:
+                                                                              TextStyle(color: Colors.black),
+                                                                        )),
+                                                              ),
+                                                              SizedBox(
+                                                                width: 80,
+                                                                child:
+                                                                    ElevatedButton(
+                                                                        style: ElevatedButton.styleFrom(
+                                                                            primary: Colors
+                                                                                .white,
+                                                                            shape: RoundedRectangleBorder(
+                                                                                borderRadius: BorderRadius.circular(
+                                                                                    10))),
+                                                                        onPressed:
+                                                                            () {
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                        },
+                                                                        child:
+                                                                            const Text(
+                                                                          'Cancel',
+                                                                          style:
+                                                                              TextStyle(color: Colors.black),
+                                                                        )),
+                                                              ),
+                                                            ],
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              });
+                                        },
+                                        icon: const Icon(
+                                          Icons.delete,
+                                          color: Colors.white,
+                                        )),
+                                  ],
+                                ),
                               ))
                             : Container()));
               }),
@@ -386,4 +392,9 @@ class _Playlist_tabState extends State<Playlist_tab> {
 
     controller.clear();
   }
+}
+
+int listLength({required listName}) {
+  final g = box.get(listName)!;
+  return g.length;
 }

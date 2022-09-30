@@ -2,8 +2,9 @@ import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:music_player/functions/functions.dart';
 import 'package:music_player/model/hivemodel.dart';
-import 'package:music_player/open%20audio/openaudio.dart';
+// import 'package:music_player/open%20audio/openaudio.dart';
 import 'package:music_player/widgets/miniplayer.dart';
+
 import 'package:on_audio_query/on_audio_query.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -116,12 +117,12 @@ class _SearchScreenState extends State<SearchScreen> {
                                     ConnectionState.done) {
                                   return GestureDetector(
                                     onTap: () {
-                                      PlayMyAudio(
-                                              allsongs: searchresult,
-                                              index: index)
-                                          .openAsset(
-                                              index: index,
-                                              audios: searchresult);
+                                      // PlayMyAudio(
+                                      //         allsongs: searchresult,
+                                      //         index: index)
+                                      //     .openAsset(
+                                      //         index: index,
+                                      //         audios: searchresult);
                                       showBottomSheet(
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
@@ -131,7 +132,12 @@ class _SearchScreenState extends State<SearchScreen> {
                                           backgroundColor:
                                               Colors.blueGrey.withOpacity(0.8),
                                           context: context,
-                                          builder: (ctx) => MiniPlayer());
+                                          builder: (ctx) => MiniPlayer(
+                                                index: index,
+                                                audiosongs: searchresult,
+                                              ));
+                                      // Recent.AddToRecent(
+                                      //     songId: audiosongs[index].metas.id!);
                                     },
                                     child: ListTile(
                                       leading: QueryArtworkWidget(

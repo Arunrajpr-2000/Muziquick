@@ -4,6 +4,7 @@ import 'package:music_player/screens/home.dart';
 
 import 'package:music_player/screens/recent.dart';
 import 'package:music_player/screens/settings.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 import '../functions/functions.dart';
 
@@ -28,24 +29,22 @@ class _DrawerState extends State<ScreenDrawer> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
-                      'asset images/SAVE_20220829_222402-removebg.png',
+                      'asset images/landscape,-transparent-bg-+-shadow-designify.png',
                       width: 50,
                       height: 50,
+                      //fit: BoxFit.contain,
                     ),
-                    Text(
-                      'Muzi',
-                      style: TextStyle(
-                          color: Color(0xffE71F1F),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25),
-                    ),
-                    Text(
-                      'Quick',
-                      style: TextStyle(
-                          color: Color(0xff24BBBB),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25),
-                    )
+                    GradientText("M I X P O D",
+                        style: TextStyle(
+                            fontFamily: "poppinz",
+                            fontSize: 25,
+                            fontWeight: FontWeight.w700),
+                        colors: const [
+                          // Color(0xffAAC4FF),
+                          // Color.fromARGB(255, 111, 72, 165),
+                          Color(0xff1682cb),
+                          Color(0xffd9f7f7),
+                        ])
                   ],
                 )),
             ListTile(
@@ -74,17 +73,17 @@ class _DrawerState extends State<ScreenDrawer> {
             //   },
             // ),
 
-            ListTile(
-              leading: const Icon(Icons.music_note, color: Colors.white),
-              title: const Text(
-                'Most Played',
-                style: TextStyle(color: Colors.white),
-              ),
-              onTap: () {
-                // Navigator.of(context).pushReplacement(
-                //     MaterialPageRoute(builder: (_) => Playlist_tab()));
-              },
-            ),
+            // ListTile(
+            //   leading: const Icon(Icons.music_note, color: Colors.white),
+            //   title: const Text(
+            //     'Most Played',
+            //     style: TextStyle(color: Colors.white),
+            //   ),
+            //   onTap: () {
+            //     // Navigator.of(context).pushReplacement(
+            //     //     MaterialPageRoute(builder: (_) => Playlist_tab()));
+            //   },
+            // ),
             ListTile(
               leading: const Icon(Icons.recent_actors, color: Colors.white),
               title: const Text(
@@ -93,7 +92,7 @@ class _DrawerState extends State<ScreenDrawer> {
               ),
               onTap: () {
                 Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (ctx1) => ScreenRecents()));
+                    MaterialPageRoute(builder: (ctx1) => screenRecent()));
               },
             ),
             ListTile(

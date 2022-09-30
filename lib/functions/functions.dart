@@ -17,12 +17,11 @@ List? databasesongs = [];
 
 //favourites---->
 List<Audio> PlayLikedSong = [];
-List<LocalSongs> Likedsongsmodel = [];
+// List<LocalSongs> Likedsongsmodel = [];
 //final likedSongs = box.get("favorites");
 List<dynamic> favorites = [];
-List<dynamic>? likedsongs = [];
 
-//List<dynamic>? likedSongS = [];
+// List<dynamic>? likedSongS = [];
 
 fetchingsongs() async {
   bool ispermission = await _audioquery.permissionsStatus();
@@ -65,15 +64,20 @@ String? playlistName = '';
 
 List<dynamic>? playlistSongs = [];
 
-//  List<LocalSongs>? playlistSongs = [];
 List<Audio> playlistsplay = [];
 
-//List<LocalSongs> dbSongs = [];
 List<LocalSongs> playlistSongmodel = [];
+
+
+
+
 
   
 
 
-//Search--->
+//Recent--->
+
+
+
 
 

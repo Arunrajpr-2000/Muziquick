@@ -1,23 +1,25 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:music_player/functions/functions.dart';
 
 import 'package:music_player/model/hivemodel.dart';
 
 class editplaylist extends StatefulWidget {
-  editplaylist({Key? key, required index, required playlistName})
-      : super(key: key);
-
+  editplaylist({Key? key, required this.playlistNameForEdit}) : super(key: key);
+  final String playlistNameForEdit;
   @override
   State<editplaylist> createState() => _editplaylistState();
 }
 
 class _editplaylistState extends State<editplaylist> {
-  TextEditingController nameController = TextEditingController();
-
+  late TextEditingController nameController;
+  String playlistNewName = '';
   @override
   void initState() {
     // TODO: implement initState
-    // nameController.text = playlistName.toString();
+    nameController =
+        TextEditingController(text: widget.playlistNameForEdit.toString());
     super.initState();
   }
 
@@ -46,7 +48,7 @@ class _editplaylistState extends State<editplaylist> {
           ),
           hintStyle: const TextStyle(color: Colors.white),
           // labelText: playlistName.toString(),
-          hintText: playlistName.toString(),
+          // hintText: playlistName.toString(),
           focusedBorder: OutlineInputBorder(
             borderSide: const BorderSide(
               color: Colors.orange,
@@ -55,31 +57,41 @@ class _editplaylistState extends State<editplaylist> {
           ),
         ),
         onChanged: (value) {
-          playlistName = value;
+          playlistNewName = value;
         },
       ),
       actions: [
         TextButton(
             onPressed: () {
-              List<LocalSongs> librayry = [];
-              List? excistingName = [];
-              if (playlists.isNotEmpty) {
-                excistingName = playlists
-                    .where((element) => element == playlistName)
-                    .toList();
-              }
+              List playListnames = box.keys.toList();
 
-              if (playlistName != '' && excistingName.isEmpty) {
-                box.put(playlistName, librayry);
-                Navigator.of(context).pop();
-                //setState(() {
-                playlists = box.keys.toList();
-                //});
+              if (!playListnames.contains(playlistNewName)) {
+                List<dynamic> playListSongs =
+                    box.get(widget.playlistNameForEdit)!;
+                box.delete(widget.playlistNameForEdit);
+                box.put(playlistNewName, playListSongs);
               } else {
-                Navigator.of(context).pop();
+                // ScaffoldMessenger(
+                //     child: SnackBar(
+                //   content: Text('${playlistNewName} already exist in playlist'),
+                // ));
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(
+                    '${playlistNewName} already exist in playlist',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  backgroundColor: Colors.orange,
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                ));
               }
+              Navigator.of(context).pop();
             },
-            child: Text(
+            child: const Text(
               "Edit",
               style: TextStyle(
                   fontFamily: "poppinz",

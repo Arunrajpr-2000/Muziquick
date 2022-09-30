@@ -21,8 +21,6 @@ class InsideList extends StatefulWidget {
 }
 
 class _InsideListState extends State<InsideList> {
-  List<LocalSongs>? playlistSongs = [];
-
   final box = Boxes.getinstance();
 
   @override
@@ -128,7 +126,12 @@ class _InsideListState extends State<InsideList> {
                                     backgroundColor:
                                         Colors.blueGrey.withOpacity(0.8),
                                     context: context,
-                                    builder: (ctx) => MiniPlayer());
+                                    builder: (ctx) => MiniPlayer(
+                                          index: index,
+                                          audiosongs: playlistsplay,
+                                        ));
+                                // Recent.AddToRecent(
+                                //     songId: audiosongs[index].metas.id!);
                               },
                               child: ListTile(
                                 leading: SizedBox(
@@ -178,6 +181,22 @@ class _InsideListState extends State<InsideList> {
                                     setState(() {
                                       playlistSongs.removeAt(index);
                                     });
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content: Text(
+                                        "Removed From Playlist",
+                                        style: TextStyle(
+                                          fontFamily: "poppinz",
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      backgroundColor: Colors.orange,
+                                      behavior: SnackBarBehavior.floating,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                    ));
                                   },
                                   icon: Icon(Icons.delete, color: Colors.white),
                                 ),

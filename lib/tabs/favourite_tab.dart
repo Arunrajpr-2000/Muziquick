@@ -29,8 +29,8 @@ class _Fav_tabState extends State<Fav_tab> {
       child: ValueListenableBuilder(
           valueListenable: box.listenable(),
           builder: (context, Boxes, _) {
-            likedsongs = box.get("favorites");
-            if (likedsongs == null || likedsongs!.isEmpty) {
+            final likedsongs = box.get("favorites");
+            if (likedsongs == null || likedsongs.isEmpty) {
               return Center(
                 child: Text(
                   'No Favourites',
@@ -45,7 +45,7 @@ class _Fav_tabState extends State<Fav_tab> {
               return ListView.builder(
                 itemBuilder: (context, index) => GestureDetector(
                   onTap: () {
-                    for (var element in likedsongs!) {
+                    for (var element in likedsongs) {
                       PlayLikedSong.add(
                         Audio.file(
                           element.uri!,
@@ -67,11 +67,16 @@ class _Fav_tabState extends State<Fav_tab> {
                         // elevation: 20,
                         backgroundColor: Colors.blueGrey.withOpacity(0.8),
                         context: context,
-                        builder: (ctx) => MiniPlayer());
+                        builder: (ctx) => MiniPlayer(
+                              index: index,
+                              audiosongs: PlayLikedSong,
+                            ));
+
+                    // Recent.AddToRecent(songId: audiosongs[index].metas.id!);
                   },
                   child: ListTile(
                     leading: QueryArtworkWidget(
-                        id: likedsongs![index].id,
+                        id: likedsongs[index].id,
                         type: ArtworkType.AUDIO,
                         nullArtworkWidget: ClipOval(
                           child: Image.asset(
@@ -84,29 +89,42 @@ class _Fav_tabState extends State<Fav_tab> {
                     trailing: IconButton(
                       onPressed: () {
                         setState(() {
-                          likedsongs!.removeAt(index);
-                          box.put("favorites", likedsongs!);
+                          likedsongs.removeAt(index);
+                          box.put("favorites", likedsongs);
                         });
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(
+                            "Removed From Favourites",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          backgroundColor: Colors.orange,
+                          behavior: SnackBarBehavior.floating,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                        ));
                       },
                       icon: Icon(Icons.favorite, color: Colors.red),
                     ),
                     title: Text(
-                      likedsongs![index].title,
+                      likedsongs[index].title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(color: Colors.white),
                     ),
                     subtitle: Text(
-                      likedsongs![index].artist == '<unknown>'
+                      likedsongs[index].artist == '<unknown>'
                           ? 'unknown'
-                          : likedsongs![index].artist,
+                          : likedsongs[index].artist,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ),
-                itemCount: likedsongs!.length,
+                itemCount: likedsongs.length,
               );
             }
           }),

@@ -46,7 +46,7 @@ class PlaylistNow extends StatelessWidget {
                         borderSide:
                             const BorderSide(color: Colors.white, width: 2),
                       ),
-                      hintStyle: const TextStyle(color: Colors.white),
+                      hintStyle: const TextStyle(color: Colors.grey),
                       hintText: 'Create a Playlist',
                       focusedBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
@@ -70,7 +70,10 @@ class PlaylistNow extends StatelessWidget {
                                 .toList();
                           }
 
-                          if (playlistName != '' && excistingName.isEmpty) {
+                          if (playlistName != '' &&
+                              playlistName != 'favourites' &&
+                              playlistName != 'recent' &&
+                              excistingName.isEmpty) {
                             box.put(playlistName, librayry);
                             Navigator.of(context).pop();
                             //setState(() {
@@ -109,7 +112,7 @@ class PlaylistNow extends StatelessWidget {
             ),
           ),
           ...playlists
-              .map((e) => e != "musics"
+              .map((e) => e != "musics" && e != "favorites" && e != 'recent'
                   ? libraryList(
                       child: Padding(
                       padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
@@ -143,10 +146,39 @@ class PlaylistNow extends StatelessWidget {
                                 playlistSongs?.add(temp);
 
                                 await box.put(e, playlistSongs!);
-
                                 Navigator.of(context).pop();
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text(
+                                    "Added to Playlist",
+                                    style: TextStyle(
+                                      fontFamily: "poppinz",
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  backgroundColor: Colors.orange,
+                                  behavior: SnackBarBehavior.floating,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                ));
                               } else {
                                 Navigator.of(context).pop();
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text(
+                                    "Already in Playlist",
+                                    style: TextStyle(
+                                      fontFamily: "poppinz",
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  backgroundColor: Colors.orange,
+                                  behavior: SnackBarBehavior.floating,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                ));
                               }
                             },
                             leading: Container(

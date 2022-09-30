@@ -1,20 +1,23 @@
 // import 'dart:developer';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:marquee/marquee.dart';
 import 'package:music_player/functions/functions.dart';
 import 'package:music_player/model/hivemodel.dart';
 import 'package:music_player/PlayList/add_to_playlist_from_home.dart';
 // import 'package:just_audio/just_audio.dart';
-import 'package:music_player/widgets/fav.dart';
+
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 
 class ScreenNowplay extends StatefulWidget {
   Audio? song;
   List<Audio> myaudiosong = [];
+  int index;
   ScreenNowplay({
     song,
     required this.myaudiosong,
+    required this.index,
     Key? key,
   }) : super(key: key);
   //final SongModel songModel;
@@ -29,12 +32,30 @@ class _ScreenNowplayState extends State<ScreenNowplay> {
   // double _currentsliderValue = 20;
   // int? index;
   int repeat = 0;
-  //List<dynamic> likedSongs = [];
+  List<dynamic> likedSongS = [];
+
+  bool prevvisible = true;
+  bool nxtvisible = true;
+
+  buttondesable() {
+    if (widget.index == 0) {
+      prevvisible = false;
+    } else {
+      prevvisible = true;
+    }
+
+    if (widget.index == audiosongs.length - 1) {
+      nxtvisible = false;
+    } else {
+      nxtvisible = true;
+    }
+  }
 
   //final AudioPlayer _audioPlayer = AudioPlayer();
   @override
   void initState() {
     // TODO: implement initState
+    buttondesable();
     super.initState();
     databaseSong = box.get('musics') as List<LocalSongs>;
 
@@ -62,7 +83,7 @@ class _ScreenNowplayState extends State<ScreenNowplay> {
         final currentSong = databaseSong.firstWhere(
             (element) => element.id.toString() == myAudio.metas.id.toString());
         // likedSongs = box.get("favorites");
-        likedsongs = box.get("favorites");
+        likedSongS = box.get("favorites")!;
         if (playing.audio.assetAudioPath.isEmpty) {
           return Center(
             child: Text('Loading....!!!'),
@@ -93,14 +114,20 @@ class _ScreenNowplayState extends State<ScreenNowplay> {
               SizedBox(
                 height: size.height * 0.05,
               ),
-              Text(
-                // widget.song.metas.title.toString(),
-                myAudio.metas.title.toString(),
-
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white70, fontSize: 24),
+              SizedBox(
+                height: size.height * 0.05,
+                width: size.width * 0.7,
+                child: Marquee(
+                  text: myAudio.metas.title.toString(),
+                  pauseAfterRound: Duration(seconds: 3),
+                  velocity: 30,
+                  blankSpace: 50,
+                  style: TextStyle(
+                      fontFamily: "poppinz",
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
               SizedBox(
                 height: size.height * 0.01,
@@ -122,7 +149,7 @@ class _ScreenNowplayState extends State<ScreenNowplay> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     // FavWidget(),
-                    likedsongs!
+                    likedSongS
                             .where((element) =>
                                 element.id.toString() ==
                                 currentSong.id.toString())
@@ -134,8 +161,23 @@ class _ScreenNowplayState extends State<ScreenNowplay> {
                               color: Colors.white,
                             ),
                             onPressed: () async {
-                              likedsongs?.add(currentSong);
-                              box.put("favorites", likedsongs!);
+                              likedSongS.add(currentSong);
+                              box.put("favorites", likedSongS);
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text(
+                                  "Added to Favourites",
+                                  style: TextStyle(
+                                    fontFamily: "poppinz",
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                backgroundColor: Colors.orange,
+                                behavior: SnackBarBehavior.floating,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                              ));
                               // likedSongs = box.get("favorites");
                               setState(() {});
                             },
@@ -148,11 +190,26 @@ class _ScreenNowplayState extends State<ScreenNowplay> {
                             ),
                             onPressed: () async {
                               setState(() {
-                                likedsongs?.removeWhere((elemet) =>
+                                likedSongS.removeWhere((elemet) =>
                                     elemet.id.toString() ==
                                     currentSong.id.toString());
-                                box.put("favorites", likedsongs!);
+                                box.put("favorites", likedSongS);
                               });
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text(
+                                  "Removed From Favourites",
+                                  style: TextStyle(
+                                    fontFamily: "poppinz",
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                backgroundColor: Colors.orange,
+                                behavior: SnackBarBehavior.floating,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                              ));
                             },
                           ),
                     IconButton(
@@ -163,6 +220,20 @@ class _ScreenNowplayState extends State<ScreenNowplay> {
                                       top: Radius.circular(20))),
                               context: context,
                               builder: (context) => PlaylistNow(song: myAudio));
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                              "Added to Playlist",
+                              style: TextStyle(
+                                fontFamily: "poppinz",
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            backgroundColor: Colors.orange,
+                            behavior: SnackBarBehavior.floating,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                          ));
                         },
                         icon: Icon(
                           Icons.playlist_add,
@@ -214,15 +285,28 @@ class _ScreenNowplayState extends State<ScreenNowplay> {
                               Icons.shuffle,
                               color: Colors.white,
                             )),
-                  IconButton(
-                      onPressed: () {
-                        assetsAudioPlayer.previous();
-                      },
-                      icon: Icon(
-                        Icons.skip_previous_sharp,
-                        color: Colors.white,
-                        size: 35,
-                      )),
+                  prevvisible
+                      ? Visibility(
+                          visible: prevvisible,
+                          child: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  widget.index = widget.index + 1;
+                                  if (widget.index != audiosongs.length - 1) {
+                                    nxtvisible = true;
+                                  }
+                                  assetsAudioPlayer.previous();
+                                });
+                              },
+                              icon: Icon(
+                                Icons.skip_previous_sharp,
+                                color: Colors.white,
+                                size: 30,
+                              )),
+                        )
+                      : SizedBox(
+                          width: 50,
+                        ),
                   PlayerBuilder.isPlaying(
                       player: assetsAudioPlayer,
                       builder: (context, isPlaying) {
@@ -237,16 +321,28 @@ class _ScreenNowplayState extends State<ScreenNowplay> {
                           ),
                         );
                       }),
-                  IconButton(
-                      onPressed: () {
-                        setState(() {});
-                        assetsAudioPlayer.next();
-                      },
-                      icon: Icon(
-                        Icons.skip_next_sharp,
-                        color: Colors.white,
-                        size: 35,
-                      )),
+                  nxtvisible
+                      ? Visibility(
+                          visible: nxtvisible,
+                          child: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  widget.index = widget.index + 1;
+                                  if (widget.index > 0) {
+                                    prevvisible = true;
+                                  }
+                                  assetsAudioPlayer.next();
+                                });
+                              },
+                              icon: Icon(
+                                Icons.skip_next_sharp,
+                                color: Colors.white,
+                                size: 30,
+                              )),
+                        )
+                      : SizedBox(
+                          width: 50,
+                        ),
                   IconButton(
                       onPressed: () {
                         setState(() {

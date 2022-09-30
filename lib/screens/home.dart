@@ -1,7 +1,5 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 
-import 'package:music_player/functions/functions.dart';
-
 import 'package:music_player/model/hivemodel.dart';
 import 'package:music_player/screens/search.dart';
 import 'package:music_player/tabs/favourite_tab.dart';
@@ -17,6 +15,8 @@ import 'package:on_audio_query/on_audio_query.dart';
 import 'package:flutter/material.dart';
 
 import 'package:music_player/widgets/drawer.dart';
+import 'package:scaffold_gradient_background/scaffold_gradient_background.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 import '../functions/functions.dart';
 
 import '../open audio/openaudio.dart';
@@ -38,6 +38,10 @@ class _ScreenHomeState extends State<ScreenHome> {
   // final _audioQuery = OnAudioQuery();
 
   // List? databasesongs = [];
+  List<dynamic>? likedsongs = [];
+
+  List<dynamic>? recentsongsdy = [];
+  List<dynamic> recents = [];
 
   @override
   void initState() {
@@ -69,11 +73,34 @@ class _ScreenHomeState extends State<ScreenHome> {
     return DefaultTabController(
       initialIndex: 1,
       length: 3,
-      child: Scaffold(
-        backgroundColor: Color(0xff091127),
+      child: ScaffoldGradientBackground(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            // Color.fromARGB(255, 20, 30, 75),
+            // Color(0xff113855),
+            // Color(0xff760181),
+            Color(0xff091127),
+            Color(0xff091127),
+            // Colors.black
+
+            // Color(0xff9d6ff3),
+            // Color(0xff8095fe),
+            // Color(0xffc35055),
+          ],
+        ),
         appBar: AppBar(
           backgroundColor: Color(0xff091127),
-          title: Text("ALL SONGS"),
+          title: GradientText("MIX POD",
+              style: TextStyle(
+                  fontFamily: "poppinz",
+                  fontSize: 25,
+                  fontWeight: FontWeight.w500),
+              colors: const [
+                Color(0xff1682cb),
+                Color(0xffd9f7f7),
+              ]),
           centerTitle: true,
           actions: [
             IconButton(
@@ -112,19 +139,57 @@ class _ScreenHomeState extends State<ScreenHome> {
                   onTap: () {
                     showBottomSheet(
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(45),
+                          borderRadius: BorderRadius.circular(20),
                         ),
                         // elevation: 20,
-                        backgroundColor: Colors.blueGrey.withOpacity(0.8),
+                        // backgroundColor: Colors.blueGrey.withOpacity(0.8),
+                        backgroundColor: Colors.blue,
                         context: context,
-                        builder: (ctx) => MiniPlayer());
+                        builder: (ctx) => MiniPlayer(
+                              index: index,
+                              audiosongs: audiosongs,
+                            ));
+
                     PlayMyAudio(index: index, allsongs: widget.audiosongs)
                         .openAsset(audios: audiosongs, index: index);
+                    // Recent.AddToRecent(songId: audiosongs[index].metas.id!);
+
+                    if (recents.length < 10) {
+                      final songs = box.get("musics") as List<LocalSongs>;
+                      final temp = songs.firstWhere((element) =>
+                          element.id.toString() ==
+                          widget.audiosongs[index].metas.id.toString());
+                      recents = recentsongsdy!;
+                      recents.add(temp);
+                      box.put("recent", recents);
+                    } else {
+                      recents.removeAt(0);
+                      box.put("recent", recents);
+                    }
+
+                    // recents = box.get('recent')!;
+                    // final isinrecent = recents
+                    //     .where(((element) =>
+                    //         element.id.toString() ==
+                    //         databaseSong[index].id.toString()))
+                    //     .toList();
+                    // if (isinrecent.isEmpty) {
+                    //   recents.add(databaseSong[index]);
+                    //   recents = recents.reversed.toList();
+                    //   if (recents.length >= 5) {
+                    //     recents.removeLast();
+                    //   }
+                    //   recents = recents.reversed.toList();
+                    //   box.put('recent', recents);
+                    // }
                   },
                   title: Text(
                     '${widget.audiosongs[index].metas.title.toString()}',
                     maxLines: 1,
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: "poppinz",
+                        fontWeight: FontWeight.w700),
                     overflow: TextOverflow.ellipsis,
                   ),
                   subtitle: Text(
@@ -133,7 +198,10 @@ class _ScreenHomeState extends State<ScreenHome> {
                         ? 'unknown '
                         : widget.audiosongs[index].metas.artist.toString(),
                     maxLines: 1,
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: "poppinz",
+                        fontWeight: FontWeight.w300),
                   ),
                   leading: QueryArtworkWidget(
                     id: int.parse(widget.audiosongs[index].metas.id.toString()),
@@ -227,6 +295,26 @@ class _ScreenHomeState extends State<ScreenHome> {
                                                 favorites = likedsongs!;
                                                 favorites.add(temp);
                                                 box.put("favorites", favorites);
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(SnackBar(
+                                                  content: Text(
+                                                    "Added to Favourites",
+                                                    style: TextStyle(
+                                                      fontFamily: "poppinz",
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  backgroundColor:
+                                                      Colors.orange,
+                                                  behavior:
+                                                      SnackBarBehavior.floating,
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10)),
+                                                ));
 
                                                 Navigator.of(context).pop();
                                               },
